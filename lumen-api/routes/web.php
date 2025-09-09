@@ -15,22 +15,12 @@
 
 use Laravel\Lumen\Routing\Router;
 
-$router->get('/api', function () use ($router) {
-    return $router->app->version();
-});
-
 $router->post('/api/register', 'UserController@register');
+
 $router->post('/api/login', 'UserController@login');
 
-
-$router->get('/api/posts', function () use ($router) {
-    return $router->app->version();
-});
-
-$router->post('/api/posts', function () use ($router) {
-    return $router->app->version();
-});
-
-$router->get('/api/posts/{id}', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => 'api', 'middleware' => 'jwt.auth'], function () use ($router) {
+    $router->post('/posts', 'PostController@store');
+    $router->get('/posts', 'PostController@index');
+    $router->get('/posts/{id}', 'PostController@show');
 });
