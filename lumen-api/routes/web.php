@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/** @var Router $router */
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,14 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+use Laravel\Lumen\Routing\Router;
+
+$router->post('/api/register', 'UserController@register');
+
+$router->post('/api/login', 'UserController@login');
+
+$router->group(['prefix' => 'api', 'middleware' => 'jwt.auth'], function () use ($router) {
+    $router->post('/posts', 'PostController@store');
+    $router->get('/posts', 'PostController@index');
+    $router->get('/posts/{id}', 'PostController@show');
 });

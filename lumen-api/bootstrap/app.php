@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
@@ -76,9 +76,11 @@ $app->configure('app');
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+    'jwt.auth' => Tymon\JWTAuth\Http\Middleware\Authenticate::class,
+    'jwt.refresh' => Tymon\JWTAuth\Http\Middleware\RefreshToken::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -109,7 +111,24 @@ $app->configure('app');
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
 
+$app->configure('jwt');
+$app->configure('auth');
+
+
+$app->withFacades();
+$app->withEloquent();
+
+$app->singleton(Illuminate\Validation\Factory::class, function ($app) {
+    $factory = new Illuminate\Validation\Factory($app['translator'], $app);
+    $factory->setPresenceVerifier(
+        new Illuminate\Validation\DatabasePresenceVerifier($app['db'])
+    );
+    return $factory;
+});
+
+
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 return $app;
