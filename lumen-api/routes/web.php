@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/** @var Router $router */
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,24 @@
 |
 */
 
-$router->get('/', function () use ($router) {
+use Laravel\Lumen\Routing\Router;
+
+$router->get('/api', function () use ($router) {
+    return $router->app->version();
+});
+
+$router->post('/api/register', 'UserController@register');
+$router->post('/api/login', 'UserController@login');
+
+
+$router->get('/api/posts', function () use ($router) {
+    return $router->app->version();
+});
+
+$router->post('/api/posts', function () use ($router) {
+    return $router->app->version();
+});
+
+$router->get('/api/posts/{id}', function () use ($router) {
     return $router->app->version();
 });
