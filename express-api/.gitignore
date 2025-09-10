@@ -1,6 +1,29 @@
+# Environment variables
 .env
+
+# Dependencies
 /node_modules
+
+# Build output
 /dist
-jest.config.cjs
-tsconfig.jest.json
+
+# Test coverage
+/coverage
+
+# IDE
+.vscode
+.idea
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Compiled test files (if TypeScript tests get compiled)
 **/*.test.js
+**/*.test.d.ts
+tests/**/*.js
+tests/**/*.d.ts
