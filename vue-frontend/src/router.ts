@@ -12,7 +12,7 @@ const routes = [
     {path: "/register", name: "register", component: Register},
     {path: "/feed", name: "feed", component: Feed, meta: {requiresAuth: true}},
     {path: "/create-post", name: "create-post", component: CreatePost, meta: {requiresAuth: true}},
-    {path: "/post/:id", name: "post-page", component: ViewPost, props: true, meta: {requiresAuth: true}},
+    {path: "/view-post/:id", name: "view-post", component: ViewPost, props: true, meta: {requiresAuth: true}},
 ];
 
 const router = createRouter({

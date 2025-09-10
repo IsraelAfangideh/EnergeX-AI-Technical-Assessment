@@ -9,13 +9,18 @@ const router = useRouter();
 
 const noPosts = computed(() => posts.value.length === 0);
 
-onMounted(async () => {
-  await getPosts();
-});
 
 const goToCreatePost = () => {
   router.push({name: "create-post"});
 };
+
+const viewPost = (id: number) => {
+  router.push({name: "view-post", params: {id}});
+}
+
+onMounted(async () => {
+  await getPosts();
+});
 </script>
 
 <template>
@@ -41,10 +46,15 @@ const goToCreatePost = () => {
     </div>
 
     <!-- Posts grid -->
-    <div v-else class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 w-full max-w-6xl mt-8 flex-col">
-      <div v-for="post in posts" :key="post.id" class="p-4 border rounded-lg shadow hover:shadow-lg transition">
-        <h2 class="font-semibold text-lg text-gray-800">{{ post.title }}</h2>
-        <p class="text-gray-600 mt-2">{{ post.content }}</p>
+    <div v-else class="flex flex-col w-full max-w-3xl gap-6">
+      <div
+          v-for="post in posts"
+          :key="post.id"
+          class="p-6 bg-white rounded-xl shadow hover:shadow-lg cursor-pointer transition-all duration-200"
+          @click="viewPost(post.id)"
+      >
+        <h2 class="text-xl font-semibold text-gray-800">{{ post.title }}</h2>
+        <p class="text-gray-600 mt-2 line-clamp-3">{{ post.content }}</p>
       </div>
     </div>
   </section>

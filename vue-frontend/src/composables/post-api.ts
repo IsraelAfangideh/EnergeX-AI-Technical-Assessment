@@ -61,9 +61,24 @@ export function usePosts() {
             loading.value = false;
         }
     }
+
+    const getPostById = async (id: number) => {
+        try {
+            const res = await api.get(`/posts/${id}`);
+            return res.data;
+        } catch (err: any) {
+            if (err.response?.status === 401) {
+                logout()
+            }
+            error.value = err.response?.data?.message || "Something went wrong";
+            throw err;
+        } finally {
+        }
+    }
     return {
         getPosts,
         createPost,
+        getPostById,
         posts,
         loading,
         error,
