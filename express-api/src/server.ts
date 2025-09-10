@@ -29,6 +29,7 @@ const db = mysql.createPool({
 
 app.get('/cache/posts', async (req, res) => {
     const cached = await redisClient.get('posts');
+    console.log("cached + " + cached);
     if (cached) return res.json(JSON.parse(cached));
 
     const [rows] = await db.query('SELECT * FROM posts');

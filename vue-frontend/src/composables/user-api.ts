@@ -1,4 +1,4 @@
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import axios from "axios";
 
 const api = axios.create({
@@ -7,6 +7,8 @@ const api = axios.create({
 
 const token = ref<string | null>(localStorage.getItem("token"));
 const user = ref<any>(null);
+
+const userIsAuthorized = computed(() => token.value !== null)
 
 if (token.value) {
     api.defaults.headers.common["Authorization"] = `Bearer ${token.value}`;
@@ -54,6 +56,7 @@ export function useUser() {
         register,
         login,
         logout,
+        userIsAuthorized,
         user,
         loading,
         error,

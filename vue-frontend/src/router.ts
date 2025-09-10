@@ -9,7 +9,7 @@ const routes = [
     {path: '/register', component: Register},
     {path: '/login', component: Login},
     {path: '/', component: Feed},
-    {path: '/create', component: CreatePost},
+    {path: '/create-post', component: CreatePost},
     {path: '/post/:id', component: PostPage, props: true},
 ]
 
