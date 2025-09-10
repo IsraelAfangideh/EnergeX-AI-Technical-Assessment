@@ -47,10 +47,13 @@ export function useUser() {
         delete api.defaults.headers.common["Authorization"];
     };
 
+    const login = async (email: string, password: string) => {
+    }
+
     return {
         register,
+        login,
         logout,
-        token,
         user,
         loading,
         error,

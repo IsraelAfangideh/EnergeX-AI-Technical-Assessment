@@ -2,15 +2,38 @@
 import {computed, ref} from "vue";
 import {Button, InputText, Password} from "primevue";
 import {useUser} from "../composables/user-api";
+import {useToast} from "primevue/usetoast";
+import {useRouter} from "vue-router";
 
 const {register} = useUser();
+const toast = useToast();
+const router = useRouter()
 const name = ref("");
 const email = ref("");
 const password = ref("");
 
 const disableSubmit = computed(() => !name.value || !email.value || !password.value)
 
-const onSubmit = () => register(name.value, email.value, password.value)
+const onSubmit = async () => {
+  try {
+    await register(name.value, email.value, password.value)
+    toast.add({
+      severity: "success",
+      summary: "Account Created",
+      detail: "Welcome aboard " + name.value,
+      life: 3000,
+    });
+    await router.push({name: "/"});
+  } catch (err: any) {
+    toast.add({
+      severity: "error",
+      summary: "Registration Failed",
+      detail: err?.response?.data?.message || "Something went wrong 😬",
+      life: 4000,
+    });
+  }
+
+}
 
 </script>
 
