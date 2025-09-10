@@ -9,7 +9,7 @@ on:
 env:
   MYSQL_ROOT_PASSWORD: root
   MYSQL_DATABASE: test_db
-  DB_USER: root
+  DB_USERNAME: root
   DB_PASSWORD: root
   DB_HOST: 127.0.0.1
   DB_PORT: 3306
@@ -107,11 +107,23 @@ jobs:
           --health-timeout=5s
           --health-retries=12
 
+    env:
+      APP_ENV: testing
+      APP_KEY: ${{ secrets.APP_KEY }}
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: test_db
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      CACHE_DRIVER: array
+      QUEUE_CONNECTION: sync
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Start Node cache service so Lumen's PostController can call it
+      # Node cache server
       - name: Setup Node for cache service
         uses: actions/setup-node@v4
         with:
@@ -121,9 +133,8 @@ jobs:
         working-directory: ./express-api
         run: |
           npm ci
-          # start server in background and log output
           nohup npx ts-node src/server.ts > node-server.log 2>&1 &
-          echo "started node cache (background)"
+
       - name: Wait for node cache
         run: |
           for i in {1..30}; do
@@ -146,25 +157,28 @@ jobs:
         working-directory: ./lumen-api
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Create .env for Lumen (test config)
+      - name: Create .env for Lumen (MySQL)
         working-directory: ./lumen-api
         run: |
           cat <<EOF > .env
           APP_KEY=${{ secrets.APP_KEY }}
           APP_ENV=testing
-          DB_CONNECTION=sqlite
-          DB_DATABASE=:memory:
+          DB_CONNECTION=mysql
+          DB_HOST=127.0.0.1
+          DB_PORT=3306
+          DB_DATABASE=test_db
+          DB_USERNAME=root
+          DB_PASSWORD=root
           CACHE_DRIVER=array
           QUEUE_CONNECTION=sync
           EOF
 
       - name: Run migrations
         working-directory: ./lumen-api
-        run: php artisan migrate --force || echo "migrate may fail if migrations skipped"
+        run: php artisan migrate:fresh --seed --force
 
       - name: Run PHPUnit
         working-directory: ./lumen-api
         env:
-          APP_ENV: testing
           NODE_CACHE_URL: http://127.0.0.1:3000/
         run: ./vendor/bin/phpunit --debug
