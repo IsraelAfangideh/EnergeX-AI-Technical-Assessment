@@ -49,7 +49,7 @@ class RegisterTest extends TestCase
 
         $this->assertEquals('John Mark', $data['user']['name']);
         $this->assertArrayHasKey('email', $data['user']);
-        $this->assertArrayHasKey('token', $data['user']);
+        $this->assertArrayHasKey('token', $data);
         $this->assertArrayNotHasKey('password', $data['user']);
     }
 }
