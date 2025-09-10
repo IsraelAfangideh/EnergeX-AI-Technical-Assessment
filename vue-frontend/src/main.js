@@ -1,5 +1,27 @@
-import { createApp } from 'vue'
-import './style.css'
+import {createApp} from 'vue'
 import App from './App.vue'
+import PrimeVue from 'primevue/config'
+import Aura from '@primeuix/themes/aura';
+import './style.css'
+import {definePreset, palette} from "@primeuix/themes";
 
-createApp(App).mount('#app')
+
+const app = createApp(App)
+
+const AuraBlue = definePreset(Aura, {
+    semantic: {
+        primary: palette('{blue}')
+    }
+});
+app.use(PrimeVue, {
+    theme: {
+        preset: AuraBlue,
+        options: {
+            prefix: 'p',
+            darkModeSelector: 'system',
+            cssLayer: false
+        }
+    }
+});
+
+app.mount('#app')

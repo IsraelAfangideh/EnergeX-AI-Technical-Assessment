@@ -1,0 +1,58 @@
+import {ref} from "vue";
+import axios from "axios";
+
+const api = axios.create({
+    baseURL: "http://localhost:8080/api",
+});
+
+const token = ref<string | null>(localStorage.getItem("token"));
+const user = ref<any>(null);
+
+if (token.value) {
+    api.defaults.headers.common["Authorization"] = `Bearer ${token.value}`;
+}
+
+export function useUser() {
+    const loading = ref(false);
+    const error = ref<string | null>(null);
+
+    const register = async (name: string, email: string, password: string) => {
+        loading.value = true;
+        error.value = null;
+
+        try {
+            const res = await api.post("/register", {name, email, password});
+
+            token.value = res.data.token;
+            user.value = res.data.user || null;
+
+            if (token.value) {
+                localStorage.setItem("token", token.value);
+            }
+            api.defaults.headers.common["Authorization"] = `Bearer ${token.value}`;
+
+            return res.data;
+        } catch (err: any) {
+            error.value = err.response?.data?.message || "Something went wrong";
+            throw err;
+        } finally {
+            loading.value = false;
+        }
+    };
+
+    const logout = () => {
+        token.value = null;
+        user.value = null;
+        localStorage.removeItem("token");
+        delete api.defaults.headers.common["Authorization"];
+    };
+
+    return {
+        register,
+        logout,
+        token,
+        user,
+        loading,
+        error,
+    };
+}
