@@ -179,4 +179,4 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: root
           NODE_CACHE_URL: http://127.0.0.1:3000/
-        run: ./vendor/bin/phpunit --verbose --debug
+        run: ./vendor/bin/phpunit --debug
