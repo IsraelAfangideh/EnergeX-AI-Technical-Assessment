@@ -70,9 +70,24 @@ class PostController extends Controller
             $post = json_decode($response->getBody(), true);
         } catch (ClientException $e) {
             // fallback to DB if Node service fails
-            $post = Post::findOrFail($id);
+            $post = Post::with('user')->findOrFail($id); // eager-load user
         }
 
-        return response()->json($post);
+        // format the post nicely for frontend
+        $formattedPost = [
+            'id' => $post['id'] ?? $post->id,
+            'title' => $post['title'] ?? $post->title,
+            'content' => $post['content'] ?? $post->content,
+            'created_at' => $post['created_at'] ?? $post->created_at,
+            'updated_at' => $post['updated_at'] ?? $post->updated_at,
+            'author' => [
+                'id' => $post['user']['id'] ?? $post->user->id,
+                'name' => $post['user']['name'] ?? $post->user->name,
+                'email' => $post['user']['email'] ?? $post->user->email,
+            ]
+        ];
+
+        return response()->json($formattedPost);
     }
+
 }
