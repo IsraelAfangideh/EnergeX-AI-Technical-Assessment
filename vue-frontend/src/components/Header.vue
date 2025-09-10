@@ -7,7 +7,7 @@ const {logout} = useUser();
 </script>
 
 <template>
-  <div class="flex flex-row absolute top-0 right-0">
+  <div class="flex flex-row absolute top-10 right-10">
     <Button label="Logout" severity="danger" @click="logout"/>
   </div>
 </template>

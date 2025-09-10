@@ -1,8 +1,18 @@
 import {ref} from "vue";
 import axios from "axios";
+import {useUser} from "./user-api";
 
 const api = axios.create({
     baseURL: "http://localhost:8080/api",
+});
+
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        config.headers = config.headers || {};
+        config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
 });
 
 const token = ref<string | null>(localStorage.getItem("token"));
@@ -15,6 +25,7 @@ if (token.value) {
 export function usePosts() {
     const loading = ref(false);
     const error = ref<string | null>(null);
+    const {logout} = useUser()
 
     const getPosts = async () => {
         try {
@@ -24,7 +35,11 @@ export function usePosts() {
             return res.data;
 
         } catch (err: any) {
+            if (err.response?.status === 401) {
+                logout()
+            }
             error.value = err.response?.data?.message || "Something went wrong";
+
             throw err;
         } finally {
             loading.value = false;
@@ -37,6 +52,9 @@ export function usePosts() {
             const res = await api.post("/posts", {title, content});
             return res.data;
         } catch (err: any) {
+            if (err.response?.status === 401) {
+                logout()
+            }
             error.value = err.response?.data?.message || "Something went wrong";
             throw err;
         } finally {

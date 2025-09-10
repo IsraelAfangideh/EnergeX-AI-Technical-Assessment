@@ -41,7 +41,7 @@ const goToCreatePost = () => {
     </div>
 
     <!-- Posts grid -->
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mt-8">
+    <div v-else class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6 w-full max-w-6xl mt-8 flex-col">
       <div v-for="post in posts" :key="post.id" class="p-4 border rounded-lg shadow hover:shadow-lg transition">
         <h2 class="font-semibold text-lg text-gray-800">{{ post.title }}</h2>
         <p class="text-gray-600 mt-2">{{ post.content }}</p>

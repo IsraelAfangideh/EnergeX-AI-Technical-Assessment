@@ -6,6 +6,16 @@ const api = axios.create({
     baseURL: "http://localhost:8080/api",
 });
 
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        config.headers = config.headers || {};
+        config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+});
+
+
 const token = ref<string | null>(localStorage.getItem("token"));
 const user = ref<any>(null);
 
@@ -38,6 +48,9 @@ export function useUser() {
 
             return res.data;
         } catch (err: any) {
+            if (err.response?.status === 401) {
+                logout()
+            }
             error.value = err.response?.data?.message || "Something went wrong";
             throw err;
         } finally {
