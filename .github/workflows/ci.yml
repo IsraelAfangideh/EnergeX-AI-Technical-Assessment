@@ -66,6 +66,7 @@ jobs:
             sleep 2
           done
       - name: Clear Jest Cache
+        working-directory: ./express-api
         run: npx jest --clearCache
       - name: Run Node tests (Jest)
         working-directory: ./express-api
