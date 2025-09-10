@@ -2,9 +2,9 @@ name: Full-Stack CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
 
 env:
   MYSQL_ROOT_PASSWORD: root
