@@ -1,0 +1,8 @@
+@import "tailwindcss" layer(base);
+@import "tailwindcss" layer(components);
+@import "tailwindcss" layer(utilities);
+
+html, body, #app {
+    height: 100%;
+    margin: 0;
+}
