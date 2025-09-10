@@ -50,6 +50,23 @@ export function useUser() {
     };
 
     const login = async (email: string, password: string) => {
+        loading.value = true;
+        error.value = null;
+        try {
+            const res = await api.post("/login", {email, password});
+            token.value = res.data.token;
+            user.value = res.data.user || null;
+            if (token.value) {
+                localStorage.setItem("token", token.value);
+            }
+            api.defaults.headers.common["Authorization"] = `Bearer ${token.value}`;
+            return res.data;
+        } catch (err: any) {
+            error.value = err.response?.data?.message || "Something went wrong";
+            throw err;
+        } finally {
+            loading.value = false;
+        }
     }
 
     return {

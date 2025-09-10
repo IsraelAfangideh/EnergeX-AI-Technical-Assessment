@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {computed, ref} from "vue";
-import {Button, InputText, Password} from "primevue";
+import {Button, Divider, InputText, Password} from "primevue";
 import {useUser} from "../composables/user-api";
 import {useToast} from "primevue/usetoast";
 import {useRouter} from "vue-router";
@@ -14,6 +14,10 @@ const password = ref("");
 
 const disableSubmit = computed(() => !name.value || !email.value || !password.value)
 
+
+const goToLogin = () => {
+  router.push({name: "login"})
+}
 const onSubmit = async () => {
   try {
     await register(name.value, email.value, password.value)
@@ -55,13 +59,25 @@ const onSubmit = async () => {
         <div class="flex flex-col gap-4">
           <InputText v-model="name" class="w-full" placeholder="Full Name"/>
           <InputText v-model="email" class="w-full" placeholder="Email" type="email"/>
-          <Password v-model="password" placeholder="Password" toggleMask/>
+          <div>
+            <Password v-model="password" fluid placeholder="Password" toggleMask/>
+          </div>
         </div>
         <div>
           <Button :disabled="disableSubmit"
                   class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                   label="Register"
                   @click="onSubmit"/>
+          <Divider/>
+          <div>
+            Already have an account?
+            <br>
+            Just Login
+          </div>
+          <Button
+              class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              label="Login"
+              @click="goToLogin"/>
         </div>
       </div>
     </div>
