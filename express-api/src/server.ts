@@ -6,9 +6,6 @@ import mysql, {RowDataPacket} from 'mysql2/promise';
 
 dotenv.config();
 
-
-const PORT = 3000;
-
 const app = express();
 app.use(express.json());
 
@@ -25,6 +22,9 @@ const db = mysql.createPool({
     password: process.env.DB_PASSWORD!,
     database: process.env.DB_NAME!,
 });
+
+(app as any).redisClient = redisClient;
+(app as any).db = db;
 
 
 app.get('/cache/posts', async (req, res) => {
@@ -96,4 +96,9 @@ app.post('/cache/posts', async (req, res) => {
 });
 
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+if (process.env.NODE_ENV !== 'test') {
+    const PORT = 3000;
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+export default app;
