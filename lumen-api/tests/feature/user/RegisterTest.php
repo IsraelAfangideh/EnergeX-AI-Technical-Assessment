@@ -1,10 +1,11 @@
 <?php
 
-namespace Tests;
+namespace Tests\feature\user;
 
 use Laravel\Lumen\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
-class UserControllerTest extends TestCase
+class RegisterTest extends TestCase
 {
 
     use DatabaseMigrations;
@@ -50,31 +51,5 @@ class UserControllerTest extends TestCase
         $this->assertArrayHasKey('email', $data['user']);
         $this->assertArrayHasKey('token', $data['user']);
         $this->assertArrayNotHasKey('password', $data['user']);
-    }
-
-    /**
-     * Test that login endpoint returns success right after registration.
-     *
-     * @return void
-     */
-    public function test_register_then_login()
-    {
-        $this->post('/api/register', [
-                'name' => 'John Mark',
-                'email' => 'johnmark@gmail.com',
-                'password' => 'password'
-            ]
-        );
-
-        print_r($this->response->getContent());
-
-        $this->post('/api/login', [
-            'email' => 'johnmark@gmail.com',
-            'password' => 'password'
-        ]);
-        $this->assertNotNull($this->response->getContent());
-        $this->seeStatusCode(200);
-
-        print_r($this->response->getContent());
     }
 }
