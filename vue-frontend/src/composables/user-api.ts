@@ -1,5 +1,6 @@
 import {computed, ref} from "vue";
 import axios from "axios";
+import {useRouter} from "vue-router";
 
 const api = axios.create({
     baseURL: "http://localhost:8080/api",
@@ -7,6 +8,7 @@ const api = axios.create({
 
 const token = ref<string | null>(localStorage.getItem("token"));
 const user = ref<any>(null);
+
 
 const userIsAuthorized = computed(() => token.value !== null)
 
@@ -17,6 +19,7 @@ if (token.value) {
 export function useUser() {
     const loading = ref(false);
     const error = ref<string | null>(null);
+    const router = useRouter()
 
     const register = async (name: string, email: string, password: string) => {
         loading.value = true;
@@ -42,13 +45,6 @@ export function useUser() {
         }
     };
 
-    const logout = () => {
-        token.value = null;
-        user.value = null;
-        localStorage.removeItem("token");
-        delete api.defaults.headers.common["Authorization"];
-    };
-
     const login = async (email: string, password: string) => {
         loading.value = true;
         error.value = null;
@@ -68,6 +64,14 @@ export function useUser() {
             loading.value = false;
         }
     }
+
+    const logout = () => {
+        token.value = null;
+        user.value = null;
+        localStorage.removeItem("token");
+        delete api.defaults.headers.common["Authorization"];
+        router.push({path: "/"})
+    };
 
     return {
         register,
