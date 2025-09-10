@@ -9,7 +9,7 @@ jest.mock('redis', () => {
     // Simple in-memory Promise-based mock that matches redis v4 async API
     return {
         createClient: () => {
-            const store = new Map<string, string>();
+            const store = new Map();
             return {
                 connect: async () => {},
                 quit: async () => {},
