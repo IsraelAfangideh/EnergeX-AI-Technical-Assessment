@@ -65,7 +65,8 @@ jobs:
             echo "waiting for services..."
             sleep 2
           done
-
+      - name: Clear Jest Cache
+        run: npx jest --clearCache
       - name: Run Node tests (Jest)
         working-directory: ./express-api
         env:
