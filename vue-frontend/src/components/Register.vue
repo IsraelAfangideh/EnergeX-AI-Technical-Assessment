@@ -27,7 +27,7 @@ const onSubmit = async () => {
       detail: "Welcome aboard " + name.value,
       life: 3000,
     });
-    await router.push({name: "/"});
+    await router.push({name: "feed"});
   } catch (err: any) {
     toast.add({
       severity: "error",
@@ -36,7 +36,6 @@ const onSubmit = async () => {
       life: 4000,
     });
   }
-
 }
 
 </script>

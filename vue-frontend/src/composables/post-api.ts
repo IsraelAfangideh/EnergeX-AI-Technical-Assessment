@@ -3,7 +3,7 @@ import axios from "axios";
 import {useUser} from "./user-api";
 
 const api = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "http://localhost:8000/api",
 });
 
 api.interceptors.request.use((config) => {

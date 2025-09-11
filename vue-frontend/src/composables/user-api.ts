@@ -3,7 +3,7 @@ import axios from "axios";
 import {useRouter} from "vue-router";
 
 const api = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "http://localhost:8000/api",
 });
 
 api.interceptors.request.use((config) => {
@@ -48,6 +48,7 @@ export function useUser() {
 
             return res.data;
         } catch (err: any) {
+            console.error(err)
             if (err.response?.status === 401) {
                 logout()
             }
