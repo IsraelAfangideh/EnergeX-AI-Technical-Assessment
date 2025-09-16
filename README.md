@@ -1,6 +1,6 @@
 # EnergeX-AI Full-Stack Technical Assessment
 
-## Quick Start (Juicy Stuff)
+## Quick Start
 
 Get the entire app up and running in **one command**:
 
