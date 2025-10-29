@@ -27,4 +27,3 @@ Access the services:
 
 * Postman
   collection - https://emergex-6561.postman.co/workspace/Emergex~eda12133-79d4-4537-888f-d12ea1b92051/collection/21675576-c41fb280-011a-485a-8591-444ef85a6798?action=share&source=copy-link&creator=21675576
-* *Loom Demo* - https://www.loom.com/share/7068f959e4264e9d898a9b163e835931
